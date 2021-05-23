@@ -122,5 +122,14 @@ class UserController extends Controller
         'error' => $validator->errors(),
       ], 'Upload photo failed!', 401);
     }
+
+    if ($request->file('file')) {
+      $file = $request->file->store('assets/user', 'public');
+      $user = Auth::user();
+      $user->profile_photo_path = $file; // simpan data path photo ke database
+      $user->update();
+
+      return ResponseFormatter::success([$file], 'File successfully uploaded!');
+    }
   }
 }
