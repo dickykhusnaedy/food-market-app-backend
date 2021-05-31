@@ -60,8 +60,8 @@ class UserController extends Controller
     try {
       // validasi input
       $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users_email'],
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|max:255|email|unique:users,email',
         'password' => $this->passwordRules()
       ]);
 
