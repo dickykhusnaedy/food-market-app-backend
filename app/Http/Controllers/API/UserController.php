@@ -21,10 +21,14 @@ class UserController extends Controller
   {
     try {
       // validasi input
-      $request->validate([
+      $validation = Validator::make($request->all(), [
         'email' => 'email|required',
-        'password' => 'required'
+        'password' => 'required',
       ]);
+
+      if ($validation->fails()) {
+        return ResponseFormatter::error($validation->errors(), 'Something went wrong!', 500);
+      }
 
       // mengecek crendentials
       $credentials = Request(['email', 'password']);
@@ -59,11 +63,15 @@ class UserController extends Controller
   {
     try {
       // validasi input
-      $request->validate([
+      $validation = Validator::make($request->all(), [
         'name' => 'required|string|max:255',
         'email' => 'required|string|max:255|email|unique:users,email',
         'password' => $this->passwordRules()
       ]);
+
+      if ($validation->fails()) {
+        return ResponseFormatter::error($validation->errors(), 'Something went wrong!', 500);
+      }
 
       // save data
       User::create([
